@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template_string
 import pickle
+import html
 
 app = Flask(__name__)
 
@@ -22,7 +23,8 @@ def save():
     # Simulate storing user data as pickled object (bad idea)
     session_data = pickle.dumps({"user": username})
     user_sessions[username] = session_data
-    return f"Session saved for {username}. <a href='/load/{username}'>Load session</a>"
+    safe_username = html.escape(username)
+    return f"Session saved for {safe_username}. <a href='/load/{safe_username}'>Load session</a>"
 
 @app.route('/load/<username>')
 def load(username):
